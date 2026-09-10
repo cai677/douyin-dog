@@ -1,0 +1,147 @@
+[
+  {
+    "path": "references/prototype-source/work/2026-09-08/analyze_reference.py",
+    "source": "work/2026-09-08/analyze_reference.py",
+    "sha256": "130da44404ee7b8970cc8e870eec81d2927efc2a5a80656713d1f5a02ec47a77"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/batch_ingest.py",
+    "source": "work/2026-09-08/batch_ingest.py",
+    "sha256": "1f929830012f4c16d3289788048bca4e2392d6146c7d8ff2b194f03d5b4c0add"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/batch_publish.py",
+    "source": "work/2026-09-08/batch_publish.py",
+    "sha256": "96f440d796dc3a5ae895400f89e884064595a8b3224c5b171961a86c8f46a34a"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/batch_review_long.py",
+    "source": "work/2026-09-08/batch_review_long.py",
+    "sha256": "c2bb1c50689bc1e9660bbc9c4394035f13eed36addd050e6cf61dc9945bff6d2"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/build_remix_review.py",
+    "source": "work/2026-09-08/build_remix_review.py",
+    "sha256": "28f59228431cecbfcfddcabd4f451577c5ac255701a23533d3f497e8568efe23"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/clean_voice_01.py",
+    "source": "work/2026-09-08/clean_voice_01.py",
+    "sha256": "b5b12b6df91d37aaec1f7d9288e71a641cf303b845cf31063a937aa83482157a"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/build_action_sample.py",
+    "source": "work/2026-09-08/doubao-sample-01/build_action_sample.py",
+    "sha256": "30cc4b05a6107466e491bd186f58e953d8f974c3f0132a3e87c52c3d9c1a8dd3"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/check_full_sample.py",
+    "source": "work/2026-09-08/doubao-sample-01/check_full_sample.py",
+    "sha256": "3a523f53813a38eed8622a4f89fc11616fbdfa75d2fb87c19a4b87802441b081"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/check_xionger_sample.py",
+    "source": "work/2026-09-08/doubao-sample-01/check_xionger_sample.py",
+    "sha256": "6a4a3c33a9533c5b2290b6e3b36fbe8a11b8241a626f1e4a963123aa3ed7533f"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/clean_rate50.py",
+    "source": "work/2026-09-08/doubao-sample-01/clean_rate50.py",
+    "sha256": "b73fdd36a70c642f927426fb0f1650ce25e37b575967a3bca4717cd396d98234"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/generate_doubao.py",
+    "source": "work/2026-09-08/doubao-sample-01/generate_doubao.py",
+    "sha256": "e9542ba10d1bfafead3cab32bba5a436a13dde2ddd68bc80c2b92980e6ce5d46"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/make_xionger_draft.py",
+    "source": "work/2026-09-08/doubao-sample-01/make_xionger_draft.py",
+    "sha256": "e06a3b11b19c837d00d4751e3520e1a89d4babefccd469d173917a1035cd18ce"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/render_full_sample.py",
+    "source": "work/2026-09-08/doubao-sample-01/render_full_sample.py",
+    "sha256": "e92127a4c66aec650ce4bd588d6dc1f2ed82c94e987c7792f064fcc646974f66"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/render_xionger_sample.py",
+    "source": "work/2026-09-08/doubao-sample-01/render_xionger_sample.py",
+    "sha256": "ed2bf60d68d9b77f961d375504d4d55014f2673f70ad8636ffc892f3d4819aab"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/运行熊二配音.ps1",
+    "source": "work/2026-09-08/doubao-sample-01/运行熊二配音.ps1",
+    "sha256": "0a1fa34da5dbc14da97521900a1994007280301045bde472d76e202ca57c84eb"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/doubao-sample-01/运行豆包配音.ps1",
+    "source": "work/2026-09-08/doubao-sample-01/运行豆包配音.ps1",
+    "sha256": "06b8e75ee27bf3005d11c0c3b96a1d8bc83ce41c89bfa2fa708af05d08296043"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/export_reference_clips.py",
+    "source": "work/2026-09-08/export_reference_clips.py",
+    "sha256": "5d5684620a48e202c829826df9d82483b1507129bab833cb1a367e574a4ecdf3"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/generate_voice_01.py",
+    "source": "work/2026-09-08/generate_voice_01.py",
+    "sha256": "c4293bc4b72a4f2ad55ea264eeed79b503570e21c597c2ec7d19ddeef2b34c82"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/match_reference.py",
+    "source": "work/2026-09-08/match_reference.py",
+    "sha256": "9fec4cfc718c1eefd9967a22fa57a95e98d42151053b7e644666ad323bcbeff4"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/mux_review.ps1",
+    "source": "work/2026-09-08/mux_review.ps1",
+    "sha256": "0292eafd736f1a72042631d1690a2b1f627c80545a509c49c56fb9478df71955"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/pilot_export.py",
+    "source": "work/2026-09-08/pilot_export.py",
+    "sha256": "dee1907ab0c796a30e2ac466425f00a5aad013d902118f6ef923e98d2e0ef427"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/pilot_review.py",
+    "source": "work/2026-09-08/pilot_review.py",
+    "sha256": "8d721c27017a760881cb7287d4dc81976e57232c313bc4b5572bae5b64348011"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/pilot_segment.py",
+    "source": "work/2026-09-08/pilot_segment.py",
+    "sha256": "87bfc0f6a08bc2f4382830ec10c55c27254e0de9e12072aaab80427e4311e877"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/prepare_doubao_sample.py",
+    "source": "work/2026-09-08/prepare_doubao_sample.py",
+    "sha256": "b78576583afb4f451c476412aa5517195eea83b35d2c4fbac6831a137bb2de00"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/prepare_match_preview.py",
+    "source": "work/2026-09-08/prepare_match_preview.py",
+    "sha256": "c5629aafc3ab2c6074d28d422f159440067b883b72a9a8cb914c644b9acca4cf"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/query_library.py",
+    "source": "work/2026-09-08/query_library.py",
+    "sha256": "26d30061a37c95a142d2fdf8d717b938964c8d9c57dc93f8a45041aa539fd8e9"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/render_match_preview.py",
+    "source": "work/2026-09-08/render_match_preview.py",
+    "sha256": "cb25dd97c7adc03d4566ce8948a22be7637348877cdf48984b2148fc3452200a"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/review_match_pools.py",
+    "source": "work/2026-09-08/review_match_pools.py",
+    "sha256": "33d2d26dbf7c7455c2f92249db4adedf20ccbf77b5b6d97672f5cd1798bfcdf3"
+  },
+  {
+    "path": "references/prototype-source/work/2026-09-08/validate_remix_review.py",
+    "source": "work/2026-09-08/validate_remix_review.py",
+    "sha256": "0e0d47a5345e891c1a2179ae49500b5425907951c3ccf6e169036030788f3e35"
+  }
+]

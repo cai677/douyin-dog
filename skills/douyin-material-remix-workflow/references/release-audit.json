@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-09-10T09:50:37.209313+00:00",
+  "skill_name": "douyin-material-remix-workflow",
+  "existing_repository_skill_names": [
+    "daihuo-video-breakdown"
+  ],
+  "name_collision": false,
+  "local_assets": 57,
+  "local_clips": 1167,
+  "latest_required_paths_checked": 54,
+  "missing_required_paths": [],
+  "latest_draft_id_consistency": "passed",
+  "python_syntax_files": 26,
+  "media_decode": "previous_run_evidence_not_repeated",
+  "draft_open_verification": "not_verified",
+  "complete_publishable_video": false,
+  "known_gaps": [
+    {
+      "id": "fragment04",
+      "seconds": 1.704
+    },
+    {
+      "id": "fragment08",
+      "seconds": 0.06548148148148147
+    },
+    {
+      "id": "fragment14",
+      "seconds": 1.584
+    },
+    {
+      "id": "fragment17",
+      "seconds": 1.224
+    },
+    {
+      "id": "fragment18",
+      "seconds": 0.22311111111111126
+    }
+  ],
+  "source_portability": "task_specific_not_one_click",
+  "excluded": [
+    "API keys",
+    "raw media",
+    "generated media",
+    "models",
+    "virtual environments",
+    "machine-specific draft JSON",
+    "private task text and source catalogs",
+    "logs"
+  ],
+  "publication_scope": "new_skill_subtree_only"
+}
