@@ -14,6 +14,7 @@ description: 将抖音带货视频下载、抽帧、拆成可复拍分镜，并�
 - 联系表脚本：本技能的 `scripts/make_contact_sheets.py`。
 - 飞书归档文件夹 token：`C73SfMg7fliZeAd7lW7cYZI5ndd`。
 - 抽帧目录与飞书草稿工作区放项目根目录；运行 `lark-cli` 时 CWD 保持项目根目录，使 `@./frames_x/xxx.jpg` 可解析。
+- 已验证的飞书 CLI 固定路径：`C:\Users\Administrator\.workbuddy\binaries\node\cli-connector-packages\node_modules\@larksuite\cli\bin\lark-cli.exe`。优先用这个 exe；不要只依赖 PATH。`C:\Users\Administrator\.workbuddy\binaries\node\cli-connector-packages\lark-cli.cmd` 只是备用包装器，传入含 `&user_code=` 的授权 URL 时会被 Windows shell 拆参，避免用于设备码二维码等 URL 场景。
 
 不要依赖已移除的 WorkBuddy Python。先定位可用 Python 并验证 `import cv2, numpy`。若仅缺 Python，可在项目内使用便携环境；若缺包，安装与 Python ABI 匹配的 OpenCV/Numpy。
 
@@ -22,11 +23,14 @@ description: 将抖音带货视频下载、抽帧、拆成可复拍分镜，并�
 用 MeowLoad CLI 下载抖音视频到用户桌面临时目录：
 
 ```powershell
+& '<meowload.exe>' version
+& '<meowload.exe>' info '<抖音链接>'
 & '<meowload.exe>' download '<抖音链接>' --media_type video --output-dir '<桌面路径>'
 ```
 
 下载后复制为规范名 `<编号-产品名>-<序号两位>.mp4` 到项目目录。序号按用户输入中的 01、02 等编号；不得把产品编号或日期误当序号。
 
+- 下载前必须先用 `version` 或 `info` 验证 CLI 已连上 MeowLoad 桌面端。如果报 `Failed to connect to the MeowLoad desktop app`，根因是 GUI 未就绪/未连接，不是链接失效；先启动或重启 MeowLoad GUI，等待 15-20 秒后重试。
 - 文件仍被占用时使用复制，不因删除原文件失败而阻塞后续步骤。
 - GUI 卡在“正在启动”不代表 CLI 失败；所有下载结束后关闭 MeowLoad 进程。
 - 用户提供本地视频时跳过下载，不修改原件。
@@ -71,15 +75,27 @@ lark-cli auth status
 
 若 `open.feishu.cn` DNS 解析失败，先用公共 DNS 对比确认。优先让用户修复网络、DNS 或 VPN；不得擅自永久修改 hosts。采用临时代理或临时 hosts 时必须说明范围、获得授权，并在归档完成后撤销。
 
+每次创建飞书文档前先检查身份状态，不要默认要求用户重新扫码：
+
+```powershell
+& '<lark-cli.exe>' doctor
+& '<lark-cli.exe>' whoami
+```
+
+- 优先用 `--as user` 创建到 `C73SfMg7fliZeAd7lW7cYZI5ndd` 文件夹；该文件夹下 Bot 身份可能报 `3380004 Permission denied`，遇到这个错误直接切 User，不要要求用户改文件夹权限。
+- 只有 `doctor` 明确显示 `User identity: missing` 或 `refresh token expired`，且 `--as user` 创建失败时，才发起 `auth login --domain docs,drive --no-wait --json` 让用户授权。
+- 设备码登录成功后，本机 token 应复用；不要每条视频都让用户扫码。用户确认授权后，继续执行同一次返回的 `auth login --device-code <device_code>`，不要重新发起新设备码。
+- 生成二维码或处理带 `&user_code=` 的验证链接时使用 `lark-cli.exe`，不要用 `.cmd` 包装器，避免 URL 被 shell 拆开。
+
 ### 草稿与上传
 
 执行前读取当前 CLI 自带的 `lark-doc` 创建工作流和 XML 参考；以当前版本规则为准。模板见 [references/feishu-doc-template.md](references/feishu-doc-template.md)。
 
 ```powershell
-lark-cli docs +script --command init-draft --presentation-decision '<JSON>' --format json --as user
+& '<lark-cli.exe>' docs +script --command init-draft --presentation-decision '<JSON>' --format json --as user
 # 把完整 XML 写入返回的 draft_path
-lark-cli docs +script --command parse --content '@./<draft_path>' --format json --as user
-lark-cli docs +create --doc-format xml --content '@./<draft_path>' --parent-token C73SfMg7fliZeAd7lW7cYZI5ndd --format json --as user
+& '<lark-cli.exe>' docs +script --command parse --content '@./<draft_path>' --format json --as user
+& '<lark-cli.exe>' docs +create --doc-format xml --content '@./<draft_path>' --parent-token C73SfMg7fliZeAd7lW7cYZI5ndd --format json --as user
 ```
 
 必须满足：
