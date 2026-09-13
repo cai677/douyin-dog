@@ -48,28 +48,37 @@ def parse_time_range(value: str) -> tuple[float, float]:
     return float(match.group(1)), float(match.group(2))
 
 
-def extract_shot_lines(content: str) -> tuple[list[ShotLine], float]:
-    duration_match = re.search("\u89c6\u9891\u65f6\u957f\\s*\\|\\s*(\\d+(?:\\.\\d+)?)\\s*\u79d2", content)
-    if not duration_match:
-        duration_match = re.search("\u89c6\u9891\u65f6\u957f[^\\d]*(\\d+(?:\\.\\d+)?)\\s*\u79d2", content)
-    target_duration = float(duration_match.group(1)) if duration_match else None
+def extract_section(content: str, title_pattern: str) -> str | None:
+    match = re.search(title_pattern, content)
+    if not match:
+        return None
+    next_heading = re.search(r"\n\s*#{1,6}\s*[一二三四五六七八九十]+[、.．]", content[match.end() :])
+    if next_heading:
+        return content[match.end() : match.end() + next_heading.start()]
+    return content[match.end() :]
 
-    shots: list[ShotLine] = []
+
+def extract_tables(content: str) -> list[str]:
     tables = re.findall(r"<table\b.*?</table>", content, flags=re.S)
-    if not tables:
-        tables = [content]
+    return tables if tables else [content]
 
+
+def extract_lines_from_tables(tables: list[str]) -> list[ShotLine]:
+    shots: list[ShotLine] = []
     for table in tables:
         time_idx = 1
         text_idx = 3
         for row in re.findall(r"<tr\b.*?</tr>", table, flags=re.S):
             cells = re.findall(r"<td\b[^>]*>(.*?)</td>", row, flags=re.S)
             clean_cells = [strip_tags(cell) for cell in cells]
-            if "\u65f6\u95f4" in clean_cells and "\u53f0\u8bcd" in clean_cells:
+            if "\u65f6\u95f4" in clean_cells:
                 time_idx = clean_cells.index("\u65f6\u95f4")
-                text_idx = clean_cells.index("\u53f0\u8bcd")
+                for text_header in ("\u6587\u6848", "\u53f0\u8bcd", "\u53e3\u64ad\u6587\u6848", "\u5b57\u5e55"):
+                    if text_header in clean_cells:
+                        text_idx = clean_cells.index(text_header)
+                        break
                 continue
-            # Fixed daihuo-video-breakdown table:
+            # Fixed daihuo-video-breakdown shot table:
             # 镜号 / 时间 / 时长 / 景别 / 台词 / 画面帧 / 音效
             row_text_idx = 4 if text_idx == 3 and len(cells) >= 7 else text_idx
             if len(cells) <= max(time_idx, row_text_idx):
@@ -81,6 +90,19 @@ def extract_shot_lines(content: str) -> tuple[list[ShotLine], float]:
             text = strip_tags(cells[row_text_idx])
             if text:
                 shots.append(ShotLine(start, end, text))
+    return shots
+
+
+def extract_shot_lines(content: str) -> tuple[list[ShotLine], float]:
+    duration_match = re.search("\u89c6\u9891\u65f6\u957f\\s*\\|\\s*(\\d+(?:\\.\\d+)?)\\s*\u79d2", content)
+    if not duration_match:
+        duration_match = re.search("\u89c6\u9891\u65f6\u957f[^\\d]*(\\d+(?:\\.\\d+)?)\\s*\u79d2", content)
+    target_duration = float(duration_match.group(1)) if duration_match else None
+
+    sentence_timeline = extract_section(content, r"#{1,6}\s*\u516d[、.．]\s*\u9010\u53e5\u6587\u6848\u65f6\u95f4\u8f74")
+    shots = extract_lines_from_tables(extract_tables(sentence_timeline)) if sentence_timeline else []
+    if not shots:
+        shots = extract_lines_from_tables(extract_tables(content))
 
     if not shots:
         raise ValueError("Cannot find shot lines in document table")
