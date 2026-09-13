@@ -41,36 +41,51 @@ def strip_tags(value: str) -> str:
 
 
 def parse_time_range(value: str) -> tuple[float, float]:
-    clean = strip_tags(value).replace("秒", "s").replace("–", "-").replace("—", "-")
-    match = re.search(r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s?", clean)
+    clean = strip_tags(value).replace("\u79d2", "s").replace("\u2013", "-").replace("\u2014", "-")
+    match = re.search(r"(\d+(?:\.\d+)?)\s*s?\s*-\s*(\d+(?:\.\d+)?)\s*s?", clean, flags=re.I)
     if not match:
         raise ValueError(f"Cannot parse time range: {value!r}")
     return float(match.group(1)), float(match.group(2))
 
 
 def extract_shot_lines(content: str) -> tuple[list[ShotLine], float]:
-    duration_match = re.search(r"视频时长\s*\|\s*(\d+(?:\.\d+)?)\s*秒", content)
+    duration_match = re.search("\u89c6\u9891\u65f6\u957f\\s*\\|\\s*(\\d+(?:\\.\\d+)?)\\s*\u79d2", content)
     if not duration_match:
-        duration_match = re.search(r"视频时长[^\d]*(\d+(?:\.\d+)?)\s*秒", content)
-    if not duration_match:
-        raise ValueError("Cannot find video duration in document")
-    target_duration = float(duration_match.group(1))
+        duration_match = re.search("\u89c6\u9891\u65f6\u957f[^\\d]*(\\d+(?:\\.\\d+)?)\\s*\u79d2", content)
+    target_duration = float(duration_match.group(1)) if duration_match else None
 
     shots: list[ShotLine] = []
-    for row in re.findall(r"<tr\b.*?</tr>", content, flags=re.S):
-        cells = re.findall(r"<td\b[^>]*>(.*?)</td>", row, flags=re.S)
-        if len(cells) < 4:
-            continue
-        try:
-            start, end = parse_time_range(cells[1])
-        except ValueError:
-            continue
-        text = strip_tags(cells[3])
-        if text:
-            shots.append(ShotLine(start, end, text))
+    tables = re.findall(r"<table\b.*?</table>", content, flags=re.S)
+    if not tables:
+        tables = [content]
+
+    for table in tables:
+        time_idx = 1
+        text_idx = 3
+        for row in re.findall(r"<tr\b.*?</tr>", table, flags=re.S):
+            cells = re.findall(r"<td\b[^>]*>(.*?)</td>", row, flags=re.S)
+            clean_cells = [strip_tags(cell) for cell in cells]
+            if "\u65f6\u95f4" in clean_cells and "\u53f0\u8bcd" in clean_cells:
+                time_idx = clean_cells.index("\u65f6\u95f4")
+                text_idx = clean_cells.index("\u53f0\u8bcd")
+                continue
+            # Fixed daihuo-video-breakdown table:
+            # 镜号 / 时间 / 时长 / 景别 / 台词 / 画面帧 / 音效
+            row_text_idx = 4 if text_idx == 3 and len(cells) >= 7 else text_idx
+            if len(cells) <= max(time_idx, row_text_idx):
+                continue
+            try:
+                start, end = parse_time_range(cells[time_idx])
+            except ValueError:
+                continue
+            text = strip_tags(cells[row_text_idx])
+            if text:
+                shots.append(ShotLine(start, end, text))
 
     if not shots:
         raise ValueError("Cannot find shot lines in document table")
+    if target_duration is None:
+        target_duration = max(shot.end for shot in shots)
     return shots, target_duration
 
 
