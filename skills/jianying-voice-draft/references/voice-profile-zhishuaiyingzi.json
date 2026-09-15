@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "voice_id": "zh_female_zhishuaiyingzi_uranus_bigtts",
+  "resource_id": "seed-tts-2.0",
+  "approved_date": "2026-09-15",
+  "user_feedback": "目前OK的",
+  "scope": "该音色的首尾气口设置；不代表其他音色或所有新句子已试听通过",
+  "trim": {
+    "head_ms": 20,
+    "tail_ms": 60,
+    "threshold_db": -42,
+    "window_ms": 10,
+    "support": "三窗至少两窗有效",
+    "internal_audio": "unchanged"
+  },
+  "audition_speed": 1,
+  "speed_policy": "试听为原始语速1.0x；新任务语速另按任务要求，不把已有草稿1.098x视为本次试听确认",
+  "reference_audio": null,
+  "reuse_policy": "同音色优先使用本设置；新音频检查起尾字和衔接，异常只局部修正，不能将低电平直接当无语音。其他音色独立校准。",
+  "voice_name": "直率英子",
+  "reference_audio_status": "试听音频仅保存在用户本机，不随仓库分发"
+}
