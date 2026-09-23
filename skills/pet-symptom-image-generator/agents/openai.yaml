@@ -1,0 +1,6 @@
+interface:
+  display_name: "宠物症状素材生成"
+  short_description: "将简短需求转化为真实可信且可批量归档的猫狗症状素材图片"
+  default_prompt: "Use $pet-symptom-image-generator to generate a realistic pet symptom image from a short Chinese brief."
+policy:
+  allow_implicit_invocation: true
