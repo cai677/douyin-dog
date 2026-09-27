@@ -18,7 +18,7 @@ Use this skill when the user wants to batch-download Douyin pet commerce videos 
 ## Operating Rules
 
 1. Download videos into a folder named after the product and normalize names as `<商品名>-01.mp4`, `<商品名>-02.mp4`, etc.
-2. Use `0.2s` frame extraction only as boundary-observation precision. Do not treat every subtitle or small overlay change as a cut.
+2. Use `0.1s` frame extraction by default as boundary-observation precision. Do not treat every subtitle or small overlay change as a cut.
 3. Split when the main visual purpose changes: pet eye symptom, eye cleaning/exam, eye-drop demo, product closeup, proof/report, person talking, result scene, price/purchase, or transition.
 4. Keep continuous same-composition口播 together unless the subject, action, or visual purpose clearly changes.
 5. Final clips must include sound. OpenCV-only clips are acceptable only as temporary diagnostics, not final deliverables.
@@ -32,7 +32,7 @@ For each video:
 ```text
 <商品名>-01.mp4
 <商品名>-01/
-  material_auto/
+  material_auto_0_1s/
     clips/
     keyframes/
     material_index.csv
@@ -62,7 +62,7 @@ For the product-level classified library:
 The `scripts/` directory contains reusable helpers from the verified workflow:
 
 - `download_douyin_batch.py`: download Douyin URLs with MeowLoad and normalize names.
-- `prepare_batch_frames.py`: extract 0.2s frames and contact sheets for boundary review.
+- `prepare_batch_frames.py`: extract 0.1s frames by default and contact sheets for boundary review.
 - `segment_batch_from_shots.py`: create audio-preserving clips from detected boundaries, with long-range splitting.
 - `classify_materials.py`: copy clips into content-type folders from a JSON mapping.
 - `verify_batch_materials.py`: check segment counts, keyframes, contact sheets, and audio presence.
@@ -78,4 +78,4 @@ Before reporting completion:
 - Count generated clip files and keyframes against `material_index.csv/json`.
 - Verify at least one representative clip per source video has an audio stream.
 - Count classified files against `classified_index.csv`.
-- If temporary `frames_0_2s` or `frame_sheets` directories were created and the user requested lean output, remove them after classification.
+- If temporary `frames_0_1s`, `frames_0_2s`, or `frame_sheets` directories were created and the user requested lean output, remove them after classification.

@@ -6,21 +6,35 @@ import sys
 
 import cv2
 
-from materialize_sample import find_ffmpeg, safe_name, save_frame, split_long_ranges, write_clip
-from make_segment_contact_sheet import main as _unused_contact_sheet_main
+try:
+    from .materialize_sample import find_ffmpeg, safe_name, save_frame, split_long_ranges, write_clip
+    from .prepare_batch_frames import frame_dir_name
+except ImportError:
+    from materialize_sample import find_ffmpeg, safe_name, save_frame, split_long_ranges, write_clip
+    from prepare_batch_frames import frame_dir_name
 
 
-def load_shots(video_dir):
-    shot_path = os.path.join(video_dir, "frames_0_2s", "shot_list.json")
+def shot_list_path(video_dir, interval=0.1):
+    return os.path.join(video_dir, frame_dir_name(interval), "shot_list.json")
+
+
+def material_dir_name(interval=0.1):
+    if float(interval) == 0.2:
+        return "material_auto"
+    return f"material_auto_{frame_dir_name(interval).replace('frames_', '')}"
+
+
+def load_shots(video_dir, interval=0.1):
+    shot_path = shot_list_path(video_dir, interval)
     with open(shot_path, encoding="utf-8") as f:
         data = json.load(f)
     ranges = [{"start": item["start"], "end": item["end"]} for item in data["shots"]]
     return data, split_long_ranges(ranges, max_duration=8.0)
 
 
-def segment_video(video_path, video_dir, ffmpeg_path):
-    data, ranges = load_shots(video_dir)
-    out_dir = os.path.join(video_dir, "material_auto")
+def segment_video(video_path, video_dir, ffmpeg_path, interval=0.1):
+    data, ranges = load_shots(video_dir, interval)
+    out_dir = os.path.join(video_dir, material_dir_name(interval))
     clips_dir = os.path.join(out_dir, "clips")
     keyframes_dir = os.path.join(out_dir, "keyframes")
     by_category_dir = os.path.join(out_dir, "by_category", "shot_segment")
@@ -40,7 +54,7 @@ def segment_video(video_path, video_dir, ffmpeg_path):
             "end": item["end"],
             "category": "shot_segment",
             "label": f"自动镜头段-{index:02d}",
-            "note": "0.2秒抽帧检测边界；超过8秒的长段自动拆分，保留原音频。",
+            "note": f"{interval:g}秒抽帧检测边界；超过8秒的长段自动拆分，保留原音频。",
         }
         base = f"{segment['id']}_{safe_name(segment['category'])}_{safe_name(segment['label'])}"
         clip_name = base + ".mp4"
@@ -75,11 +89,12 @@ def segment_video(video_path, video_dir, ffmpeg_path):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("usage: python segment_batch_from_shots.py <product_dir>")
+    if len(sys.argv) not in (2, 3):
+        print("usage: python segment_batch_from_shots.py <product_dir> [interval_seconds]")
         return 2
 
     product_dir = sys.argv[1]
+    interval = float(sys.argv[2]) if len(sys.argv) == 3 else 0.1
     ffmpeg_path = find_ffmpeg()
     if not ffmpeg_path:
         raise RuntimeError("ffmpeg not found")
@@ -93,7 +108,7 @@ def main():
     for video_path in videos:
         stem = os.path.splitext(os.path.basename(video_path))[0]
         video_dir = os.path.join(product_dir, stem)
-        out_dir, count = segment_video(video_path, video_dir, ffmpeg_path)
+        out_dir, count = segment_video(video_path, video_dir, ffmpeg_path, interval)
         print(f"{stem}: {count} segments -> {out_dir}", flush=True)
 
 
