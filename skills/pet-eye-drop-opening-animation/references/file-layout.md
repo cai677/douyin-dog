@@ -1,132 +1,27 @@
-# File Layout and Naming Rules
+# 文件与状态
 
-These rules make externally generated clips easy for Codex and other tools to find, inspect, and assemble.
+本技能交付物是本地 Word 分镜剧本；目录按任务需要创建，不建立视频工程。
 
-## Root
+## 推荐任务文件
 
-Use this project-relative root:
+- 分镜剧本.docx：编写者交付的纯文字执行稿，包含关键帧提示词和回填位置。
+- 任务说明.md：确认稿来源、版本、缺失资料与当前状态。
+- reports/：内容结构和文档排版检查记录。
+- backups/：更新前的 Word 或规则备份。
 
-```text
-outputs/eye-drop-opening/
-```
+外部模型后续在同一份 Word 内嵌图后保存。为保留历史可以使用“分镜剧本_关键帧确认稿_vNN.docx”版本名，但必须是原内容基础上的更新，不得只另交图集而不回填文档。
 
-## Version Directories
+## 关键帧文件
 
-Use these exact names:
+按实际镜头数量命名为 keyframes/shot-01-keyframe.png、shot-02-keyframe.png，依次递增。不固定五张或六张，不预设四种宠物版本。文档中图片编号与文件编号一致。
 
-```text
-version-01-bichon
-version-02-shiba
-version-03-ragdoll-cat
-version-04-puppy-drama
-```
+## 状态
 
-Each version should contain:
+编写者只记录实际发生的状态：
+- 剧本说明及提示词完成。
+- 文档结构检查通过或未通过。
+- 分页目视检查通过、未通过或未完成及原因。
+- 关键帧待外部模型生成及回填。
+- 关键帧待用户确认。
 
-```text
-keyframes/
-clips/
-audio/
-exports/
-review.md
-```
-
-## Shot IDs
-
-There are exactly 6 shots:
-
-```text
-shot-01  eye micro-world establishing shot
-shot-02  cotton pad approaching
-shot-03  germ boss dismisses surface wiping
-shot-04  eye-drop bottle appears
-shot-05  red warning reversal
-shot-06  germ base washed away
-```
-
-## Keyframe Names
-
-Final selected keyframes must use:
-
-```text
-keyframes/shot-01-keyframe.png
-keyframes/shot-02-keyframe.png
-keyframes/shot-03-keyframe.png
-keyframes/shot-04-keyframe.png
-keyframes/shot-05-keyframe.png
-keyframes/shot-06-keyframe.png
-```
-
-Drafts may use:
-
-```text
-keyframes/shot-02-candidate-a.png
-keyframes/shot-02-candidate-b.png
-```
-
-The selected draft must be copied or exported to the standard name before assembly.
-
-## Clip Names
-
-Final selected clips must use:
-
-```text
-clips/shot-01.mp4
-clips/shot-02.mp4
-clips/shot-03.mp4
-clips/shot-04.mp4
-clips/shot-05.mp4
-clips/shot-06.mp4
-```
-
-Drafts may use:
-
-```text
-clips/shot-04-v1.mp4
-clips/shot-04-v2.mp4
-```
-
-The selected draft must be copied or exported to the standard name before assembly.
-
-## Optional Audio and Subtitle Files
-
-Use:
-
-```text
-audio/voiceover.wav
-audio/sfx-warning.wav
-audio/sfx-splash.wav
-audio/subtitles.srt
-```
-
-If the clips already include all needed audio, `audio/` can remain empty.
-
-## Export Names
-
-Use:
-
-```text
-exports/opening-rough.mp4
-exports/opening-with-subtitles.mp4
-exports/opening-final.mp4
-```
-
-## Completeness Check
-
-A version is ready for assembly when these 12 files exist:
-
-```text
-keyframes/shot-01-keyframe.png
-keyframes/shot-02-keyframe.png
-keyframes/shot-03-keyframe.png
-keyframes/shot-04-keyframe.png
-keyframes/shot-05-keyframe.png
-keyframes/shot-06-keyframe.png
-clips/shot-01.mp4
-clips/shot-02.mp4
-clips/shot-03.mp4
-clips/shot-04.mp4
-clips/shot-05.mp4
-clips/shot-06.mp4
-```
-
+历史图片或试生成图不自动算作用户已确认；无图片时不伪造图片哈希或检查结果。当前职责不需要 clips、audio、exports 视频目录、拼接清单或渲染检查记录。
