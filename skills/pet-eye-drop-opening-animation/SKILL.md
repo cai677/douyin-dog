@@ -1,98 +1,42 @@
 ---
 name: pet-eye-drop-opening-animation
-description: Create and assemble pet eye-drop product opening animations from a fixed 6-shot storyboard, including keyframe prompts, external clip handoff rules, file naming, validation, and final concatenation.
+description: 为已与用户明确的宠物滴眼液动画分镜编写 Word 剧本说明，包含交给其他大模型的逐镜头关键帧生图与原 Word 回填要求；不负责生图或视频制作。
 ---
 
-# Pet Eye Drop Opening Animation
+# 宠物滴眼液分镜 Word 交付
 
-Use this skill when the user wants to produce an 8 to 12 second pet eye-drop product opening animation from a scripted micro-story, especially when external tools generate keyframes or image-to-video clips and Codex later checks, organizes, and assembles the result.
+## 职责边界
 
-The workflow is intentionally split into controlled short shots. Do not try to generate the whole 10 second video from one prompt unless the user explicitly asks for a rough experiment.
+本技能负责把双方已明确的分镜剧本整理成可直接交给其他大模型阅读的本地 Word 文档（.docx）。本模型只编写剧本说明和关键帧要求，不自行调用生图工具，不生成或插入示例关键帧。
 
-## Core Story
+文档内明确要求接收文档的大模型：先为每个分镜生成一张关键帧图，逐张自检，然后直接嵌入并更新收到的这份 Word，再交回用户确认。文档到此结束。视频怎么生成由用户另行向执行方下指令。
 
-The default story is a comedic micro-world around a pet's eye:
+不要在文档中加入逐镜头视频生成、整片动画生成、拼接、剪辑、配音制作、字幕制作、音效、BGM、渲染或视频交付流程。剧情台词和预估镜头时间可以保留，作为理解故事的必要信息，不扩展成声音或视频制作指令。“确认关键帧”不构成制作视频的授权。
 
-1. Germ characters live around the tear-stain area.
-2. A cotton pad approaches.
-3. The germ boss says wiping the surface is useless.
-4. Eye drops appear.
-5. The germ boss panics.
-6. The droplet washes away the germ base.
+## 输入与剧本确认
 
-Use the 6-shot structure in [references/shot-workflow.md](references/shot-workflow.md) for prompts, timing, dialogue, and pass or redo criteria.
+- 从当前对话中提取最新已确认剧情、角色、镜头数、台词和画面限制；修改后的内容覆盖早期草案。
+- 镜头数、总时长、猫狗品种和剧情方向按本次确认稿确定，不固定为六镜头，也不固定为某个反派故事。
+- 用户只要求讨论创意时，先讨论；剧本尚未明确时，不把自行选定的方向写成已批准。
+- 保留用户确认台词，不擅自扩写产品事实。产品图、品牌或型号缺失时记录为待补；占位外观不得标为真实包装。
+- 资质、适用范围和功效区分用户提供与资料核实，不编造已核实状态。
 
-## Version Strategy
+## Word 内容与外部执行指令
 
-Create variants by keeping the same 6-shot structure and changing only the pet identity, germ design, acting style, and color mood:
+编写前读取 [Word 内容与关键帧回填规范](references/shot-workflow.md)。每份 Word 至少包括：
+1. 当前确认的剧本概述、角色及视觉连续性要求。
+2. 分镜总览：稳定镜头编号、预估时间、画面与已确认台词。
+3. 每镜头的静态关键帧状态、可直接复制的生图提示词、参考图要求、构图及检查点。
+4. 给接收文档的大模型的清晰指令：生成全部关键帧，按编号嵌入原 Word，保存更新后文档，提交用户确认并停止。
 
-- `version-01-bichon`: white bichon, cute clean main version.
-- `version-02-shiba`: shiba inu, meme-like comedic version.
-- `version-03-ragdoll-cat`: ragdoll cat, softer premium cat-owner version.
-- `version-04-puppy-drama`: small puppy, animated short-drama version.
+关键帧描述静态画面，不把多阶段动作挤进同一张图，也不把它写成图生视频提示词。若剧情需要先后变化，应说明选取哪个瞬间作为关键帧，而非额外增加未确认镜头。
 
-Do not change the shot count, shot IDs, or final file names when creating variants. This keeps comparison and assembly reliable.
+为每个镜头设置“关键帧回填位置（待外部模型生成）”及文件名说明；不要把空位、路径或文字占位当成已生成图片。
 
-## Required File Layout
+## 文件与检查
 
-Before asking the user to generate clips in external tools, create or confirm this structure under the project workspace:
+文件保留规则见 [文件与状态](references/file-layout.md)。优先使用可用的 documents 技能生成或更新 Word，并遵循其结构与排版验证流程。没有渲染环境时如实记录分页检查未完成，不声称排版已通过。
 
-```text
-outputs/eye-drop-opening/
-  version-01-bichon/
-    keyframes/
-    clips/
-    audio/
-    exports/
-    review.md
-  version-02-shiba/
-  version-03-ragdoll-cat/
-  version-04-puppy-drama/
-  prompts/
-  shot_manifest.csv
-```
+交付前检查镜头和台词与确认稿一致、每镜头有生图提示词、Word 内清楚指定外部模型生图及回填、没有混入后续视频制作流程。交付本地 .docx，旧版先备份。报告应区分“文档完成”“图片尚未由外部模型生成”“等待用户确认”，不能声称已生图或已生产视频。
 
-Read [references/file-layout.md](references/file-layout.md) before organizing files, checking clip completeness, or concatenating output.
-
-## External Generation Handoff
-
-When the user will use another tool for image-to-video generation:
-
-1. Give them the exact shot prompt from the workflow.
-2. Tell them to save the final selected keyframe as `keyframes/shot-XX-keyframe.png`.
-3. Tell them to save the final selected video clip as `clips/shot-XX.mp4`.
-4. Let them keep drafts as `shot-XX-v1.mp4` or `shot-XX-candidate-a.png`, but final assembly must use the standard file names.
-5. Ask them to return only after all 6 standard clips exist for the chosen version, or after one clip if they want a single-shot quality check.
-
-Never rely on generated Chinese text inside the video model output. Add dialogue, captions, voiceover, and subtitles in post-production.
-
-## Checking and Assembly
-
-For a chosen version:
-
-1. Check that `clips/shot-01.mp4` through `clips/shot-06.mp4` exist.
-2. Check basic media properties with `ffprobe` or the provided helper script.
-3. If clips are missing, report the exact missing paths and stop.
-4. If clips are present, normalize or concatenate with ffmpeg.
-5. Save rough assembly to `exports/opening-rough.mp4`.
-6. If subtitles or audio are provided, save the finished result as `exports/opening-final.mp4`.
-
-Use `scripts/prepare_opening_project.py` to create folders, write a manifest, and check expected files. Use project-local ffmpeg when available; otherwise use an installed ffmpeg only if it is already usable in the environment.
-
-## Compliance Guardrail
-
-Avoid absolute medical claims in subtitles or voiceover. Prefer:
-
-```text
-眼屎多、泪痕重，别只擦表面
-```
-
-Avoid wording such as:
-
-```text
-专治
-根治
-保证效果
-药到病除
-```
-
+原技能的固定六镜头与视频目录初始化脚本已停用，不应运行它准备视频工程。
