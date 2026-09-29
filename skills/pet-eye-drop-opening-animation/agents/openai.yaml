@@ -1,3 +1,4 @@
-display_name: Pet Eye Drop Opening Animation
-short_description: Build 6-shot pet eye-drop ad openings from external keyframes and clips.
-default_prompt: Use this skill to create, organize, validate, and assemble pet eye-drop product opening animations.
+interface:
+  display_name: "宠物滴眼液分镜 Word"
+  short_description: "交付已确认的分镜 Word，写清外部模型关键帧生图与原文档回填要求"
+  default_prompt: "使用 $pet-eye-drop-opening-animation 把我们已明确的分镜剧本整理为本地 Word，只写清每镜头关键帧生图及回填原 Word 的要求，不生成图片，不加入视频制作流程。"
